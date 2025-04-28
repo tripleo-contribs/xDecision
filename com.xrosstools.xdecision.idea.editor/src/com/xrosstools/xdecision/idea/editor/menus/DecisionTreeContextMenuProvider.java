@@ -11,7 +11,6 @@ import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodePart;
 import com.xrosstools.xdecision.idea.editor.parts.expression.BaseExpressionPart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
 public class DecisionTreeContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private NodeContextMenuProvider nodeMenuProvider;
@@ -19,14 +18,18 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
 	private ExpressionContextMenuProvider expMenuProvider;
     private DiagramContextMenuProvider diagramMenuProvider;
 
+    public DecisionTreeContextMenuProvider(Project project) {
+        nodeMenuProvider = new NodeContextMenuProvider(project);
+        expMenuProvider = new ExpressionContextMenuProvider(project);
+        connMenuProvider = new ConnectionContextMenuProvider(project);
+        diagramMenuProvider = new DiagramContextMenuProvider(project);
+    }
 
-    public DecisionTreeContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
-        super((listener));
-
-        nodeMenuProvider = new NodeContextMenuProvider(project, diagram, listener);
-        expMenuProvider = new ExpressionContextMenuProvider(project, diagram, listener);
-        connMenuProvider = new ConnectionContextMenuProvider(project, diagram, listener);
-        diagramMenuProvider = new DiagramContextMenuProvider(project, diagram, listener);
+    public void setDiagram(DecisionTreeDiagram diagram) {
+        nodeMenuProvider.setDiagram(diagram);
+        expMenuProvider.setDiagram(diagram);
+        connMenuProvider.setDiagram(diagram);
+        diagramMenuProvider.setDiagram(diagram);
     }
 
     public JPopupMenu buildContextMenu(Object selected) {
